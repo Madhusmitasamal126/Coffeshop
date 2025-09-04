@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  .order-summary {
+    max-width: 500px;
+    margin: 60px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  .order-summary h1 { font-size: 26px; margin-bottom: 20px; color: #333; }
+  .order-summary p { font-size: 16px; margin: 10px 0; color: #555; }
+  .highlight { font-size: 18px; font-weight: bold; color: #4caf50; }
+  .error { color: #e53935; font-weight: bold; background: #fdeaea; padding: 10px; border-radius: 8px; }
+  .btn { margin: 15px 10px 0; padding: 12px 20px; font-size: 16px; border: none; border-radius: 10px; cursor: pointer; }
+  .btn-cod { background: #ff9800; color: white; }
+  .btn-cod:hover { background: #e68900; transform: translateY(-2px); }
+  .btn-online { background: #4caf50; color: white; }
+  .btn-online:hover { background: #388e3c; transform: translateY(-2px); }
+</style>
+
+<div class="order-summary">
+  <h1>🛒 Order Summary</h1>
+
+  {% if error %}
+    <p class="error">{{ error }}</p>
+  {% else %}
+    <p>You selected: <span class="highlight">{{ qty }}</span> × <strong>{{ item.name }}</strong></p>
+    <p>Total Price: <span class="highlight">₹{{ total }}</span></p>
+
+   <form method="post" action="{% url 'order_confirm' %}">
+
+  {% csrf_token %}
+  <input type="hidden" name="item_id" value="{{ item.id }}">
+  <input type="hidden" name="qty" value="{{ qty }}">
+  <button type="submit" name="payment_method" value="cod" class="btn btn-cod">🚚 Cash on Delivery</button>
+  <button type="submit" name="payment_method" value="online" class="btn btn-online">💳 Online Payment</button>
+</form>
+
+  {% endif %}
+</div>
+{% endblock %}

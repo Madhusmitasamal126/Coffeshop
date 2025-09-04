@@ -1,0 +1,13 @@
+<div class="success-container">
+  <h2>✅ Payment Successful!</h2>
+  <p>Thank you for your order.</p>
+  <p><strong>{{ order.item.name }}</strong> × {{ order.quantity }}</p>
+  <p>Total Paid: <span style="color:#2e7d32">₹{{ order.total_price }}</span></p>
+  <p>You will be redirected shortly...</p>
+</div>
+
+<script>
+  setTimeout(function() {
+    window.location.href = "{% url 'order_confirmed' order.id %}";
+  }, 3000);  // Redirect after 3 seconds
+</script>

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  .payment-container {
+    max-width: 500px;
+    margin: 60px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  .payment-container h2 { margin-bottom: 20px; color: #333; }
+  .payment-container p { font-size: 16px; margin: 10px 0; color: #555; }
+  .highlight { font-weight: bold; color: #4caf50; }
+  button { margin-top: 20px; padding: 12px 20px; font-size: 16px; background: #4caf50; color: white; border: none; border-radius: 10px; cursor: pointer; }
+  button:hover { background: #388e3c; transform: translateY(-2px); }
+</style>
+
+<div class="payment-container">
+  <h2>💳 Payment Page</h2>
+  <p>Order: <strong>{{ order.item.name }}</strong></p>
+  <p>Quantity: <span class="highlight">{{ order.quantity }}</span></p>
+  <p>Total Amount: <span class="highlight">₹{{ order.total_price }}</span></p>
+
+ <form method="post" action="{% url 'payment_success' order.id %}">
+  {% csrf_token %}
+  <button id="rzp-button">Proceed to Pay</button>
+</form>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+
+<script>
+var options = {
+    "key": "rzp_test_RBbwsG3RFwN4N1",
+    "amount": "{{ amount|floatformat:2 }}00", // amount in paisa
+    "currency": "{{ currency }}",
+    "name": "Cafe Management",
+    "description": "Order Payment",
+    "order_id": "{{ razorpay_order_id }}",
+    "handler": function (response){
+        window.location.href = "{% url 'payment_success' order.id %}";
+    },
+    "prefill": {
+        "name": "{{ request.user.username }}",
+        "email": "{{ request.user.email }}",
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+var rzp1 = new Razorpay(options);
+document.getElementById('rzp-button').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script>
+
+</div>
+{% endblock %}

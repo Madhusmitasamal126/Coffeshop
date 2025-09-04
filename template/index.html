@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+  <!-- Carousel -->
+  <div class="carousel">
+    <div class="slides">
+      <div class="slide">
+        <img src="{% static 'img/slider1.jpg' %}" alt="Espresso">
+        <div class="caption">Freshly Brewed Coffee</div>
+      </div>
+      <div class="slide">
+        <img src="{% static 'img/slider2.jpg' %}" alt="Snacks">
+        <div class="caption">Delicious Snacks</div>
+      </div>
+      <div class="slide">
+        <img src="{% static 'img/slider3.jpg' %}" alt="Desserts">
+        <div class="caption">Sweet Desserts</div>
+      </div>
+    </div>
+    <button class="prev" onclick="moveSlide(-1)">❮</button>
+    <button class="next" onclick="moveSlide(1)">❯</button>
+  </div>
+
+  <!-- Home Section -->
+  <section id="home">
+    <h2>Fresh Coffee, Tasty Snacks</h2>
+    <p>We serve freshly brewed coffee and delicious snacks made with love.</p>
+  </section>
+
+  <!-- Menu Section -->
+  <section id="menu">
+    <h2>Our Menu</h2>
+   <div class="category-grid" style="display:flex; gap:20px; flex-wrap:wrap;">
+    {% for category in categories %}
+    <div class="card" style="border:1px solid #ddd; padding:10px; border-radius:6px; width:200px; text-align:center;">
+        {% if category.image %}
+        <img src="{{ category.image.url }}" alt="{{ category.name }}" style="width:100%; height:150px; object-fit:cover; border-radius:6px;">
+        {% endif %}
+        <h3>{{ category.name }}</h3>
+        <a href="{% url 'menu' %}?category={{ category.id }}" 
+           style="padding:8px 12px; background:#6f4e37; color:white; border-radius:5px; display:inline-block; text-decoration:none;">
+           View Items
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+  </section>
+
+  <!-- About Section -->
+  <section id="about">
+    <h2>About Us</h2>
+    <p>We are passionate about serving the best coffee in town. Our cafe is the perfect place to relax, work, and enjoy.</p>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <p><i class="fa fa-map-marker"></i> 123 Cafe Street, Bhubaneswar</p>
+    <p><i class="fa fa-phone"></i> +91 9876543210</p>
+    <p><i class="fa fa-envelope"></i> info@cafems.com</p>
+  </section>
+
+  <!-- Carousel Script -->
+  <script>
+    let index = 0;
+    const slides = document.querySelector(".slides");
+    const totalSlides = document.querySelectorAll(".slide").length;
+
+    function moveSlide(step) {
+      index = (index + step + totalSlides) % totalSlides;
+      slides.style.transform = `translateX(${-index * 100}%)`;
+    }
+
+    setInterval(() => {
+      moveSlide(1);
+    }, 4000);
+  </script>
+
+{% endblock %}

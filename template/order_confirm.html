@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  .confirm-container {
+    max-width: 500px;
+    margin: 60px auto;
+    padding: 30px;
+    background: #e8f5e9;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  h2 { color: #2e7d32; }
+  p { font-size: 16px; color: #444; }
+  a {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #4caf50;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+  }
+  a:hover { background: #388e3c; }
+</style>
+
+<div class="confirm-container">
+  {% if order.status == "Paid" %}
+    <h2>✅ Payment Successful!</h2>
+  {% elif order.status == "Confirmed" %}
+    <h2>✅ Order Confirmed (Cash on Delivery)</h2>
+  {% else %}
+    <h2>🕒 Order Pending</h2>
+  {% endif %}
+
+  <p>Thank you for your order.</p>
+  <p><strong>{{ order.item.name }}</strong> × {{ order.quantity }}</p>
+  <p>Total: <span style="color:#2e7d32">₹{{ order.total_price }}</span></p>
+
+ <a href="{% url 'menu' %}">Back to Menu</a>
+ 
+</div>
+{% endblock %}
