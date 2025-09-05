@@ -2,30 +2,135 @@
 {% block title %}About Us{% endblock %}
 
 {% block content %}
-<div style="max-width: 900px; margin: 0 auto; padding: 20px;">
-    <h1 style="text-align:center; margin-bottom: 30px;">About Our Cafe ☕</h1>
+<div class="container py-5">
+    <h1 class="text-center mb-5 fw-bold text-coffee">About Our Cafe ☕</h1>
 
     <!-- About Section -->
-    <div class="card" style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px;">
-        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80" 
-             alt="Cafe" style="flex:1 1 300px; border-radius: 10px; max-width: 100%; height: auto;">
-        <div style="flex:1 1 300px;">
-            <h2>Our Story</h2>
-            <p>Founded in 2020, Our Cafe has been serving the finest coffee and snacks with a passion for quality and community. We believe in creating a cozy, welcoming space for everyone to enjoy a perfect cup of coffee.</p>
-            <p>Our baristas are trained to craft each beverage with care, ensuring every sip is an experience. Whether you’re here for a quick espresso or a relaxing latte, we’ve got you covered!</p>
+    <div class="row align-items-center mb-5">
+        <div class="col-md-6 mb-3 mb-md-0">
+            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80" 
+                     class="card-img-top" alt="Cafe" style="height: 350px; object-fit: cover;">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="p-4 bg-light rounded-4 shadow-sm">
+                <h2 class="fw-bold text-coffee mb-3">Our Story</h2>
+                <p>Founded in 2020, Our Cafe has been serving the finest coffee and snacks with a passion for quality and community. We believe in creating a cozy, welcoming space for everyone to enjoy a perfect cup of coffee.</p>
+                <p>Our baristas are trained to craft each beverage with care, ensuring every sip is an experience. Whether you’re here for a quick espresso or a relaxing latte, we’ve got you covered!</p>
+            </div>
         </div>
     </div>
 
-    <!-- Mission Section -->
-    <div class="card" style="margin-top: 20px;">
-        <h2>Our Mission</h2>
-        <p>To bring people together over great coffee and unforgettable flavors. We aim to make every visit a memorable experience, combining taste, comfort, and community spirit.</p>
+    <!-- Mission & Vision Section -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm p-4 rounded-4 bg-white border-0 hover-card">
+                <h3 class="fw-bold text-coffee mb-3">Our Mission</h3>
+                <p>To bring people together over great coffee and unforgettable flavors. We aim to make every visit a memorable experience, combining taste, comfort, and community spirit.</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm p-4 rounded-4 bg-white border-0 hover-card">
+                <h3 class="fw-bold text-coffee mb-3">Our Vision</h3>
+                <p>To be the go-to cafe for coffee lovers in the city, known for quality, consistency, and a warm, welcoming atmosphere.</p>
+            </div>
+        </div>
     </div>
 
-    <!-- Vision Section -->
-    <div class="card" style="margin-top: 20px;">
-        <h2>Our Vision</h2>
-        <p>To be the go-to cafe for coffee lovers in the city, known for quality, consistency, and a warm, welcoming atmosphere.</p>
+    <!-- Fun Stats Section -->
+    <div class="row text-center mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="p-4 bg-coffee-light rounded-4 shadow-sm">
+                <h2 class="fw-bold text-coffee">☕ 10K+</h2>
+                <p>Cups of Coffee Served</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="p-4 bg-coffee-light rounded-4 shadow-sm">
+                <h2 class="fw-bold text-coffee">🥐 5K+</h2>
+                <p>Delicious Snacks</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="p-4 bg-coffee-light rounded-4 shadow-sm">
+                <h2 class="fw-bold text-coffee">😊 8K+</h2>
+                <p>Happy Customers</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team / Baristas Section -->
+    <h2 class="text-center fw-bold mb-4 text-coffee">Meet Our Baristas 👩‍🍳☕</h2>
+    <div class="row g-4 justify-content-center">
+        <div class="col-6 col-md-3">
+            <div class="card shadow-sm border-0 rounded-4 text-center hover-card">
+                <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?auto=format&fit=crop&w=400&q=80" 
+                     class="card-img-top rounded-top-4" style="height:250px; object-fit: cover;" alt="Barista 1">
+                <div class="card-body">
+                    <h5 class="fw-bold">Alice</h5>
+                    <p class="text-muted">Head Barista</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card shadow-sm border-0 rounded-4 text-center hover-card">
+                <img src="https://images.unsplash.com/photo-1595152772835-219674b2a8a1?auto=format&fit=crop&w=400&q=80" 
+                     class="card-img-top rounded-top-4" style="height:250px; object-fit: cover;" alt="Barista 2">
+                <div class="card-body">
+                    <h5 class="fw-bold">Bob</h5>
+                    <p class="text-muted">Barista</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card shadow-sm border-0 rounded-4 text-center hover-card">
+                <img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=400&q=80" 
+                     class="card-img-top rounded-top-4" style="height:250px; object-fit: cover;" alt="Barista 3">
+                <div class="card-body">
+                    <h5 class="fw-bold">Clara</h5>
+                    <p class="text-muted">Barista</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center mt-5">
+        <h3 class="fw-bold mb-3">Come Experience the Flavor!</h3>
+        <a href="{% url 'menu' %}" class="btn btn-coffee btn-lg px-5">Explore Our Menu ☕</a>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<style>
+:root {
+    --coffee-dark: #4B2E2B;
+    --coffee-medium: #7B4F45;
+    --coffee-light: #D9B99B;
+}
+.text-coffee { color: var(--coffee-dark); }
+.bg-coffee-light { background-color: #fff7f0; }
+
+.btn-coffee {
+    background-color: var(--coffee-medium);
+    color: var(--coffee-light);
+    border: none;
+    transition: transform 0.3s, background-color 0.3s;
+}
+.btn-coffee:hover {
+    background-color: var(--coffee-dark);
+    transform: translateY(-2px);
+    color: var(--coffee-light);
+}
+
+.hover-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+</style>
 {% endblock %}

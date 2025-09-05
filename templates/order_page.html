@@ -2,33 +2,99 @@
 {% block title %}Order Page{% endblock %}
 
 {% block content %}
-<div style="max-width:600px; margin:50px auto; background:#fff; padding:30px; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.1);">
-    {% if error %}
-        <p class="error" style="color:#dc3545; font-weight:600; text-align:center;">{{ error }}</p>
-    {% else %}
-        <h1 style="text-align:center; margin-bottom:20px; color:#ff6f61;">Order: {{ item.name }}</h1>
+<div class="container my-5" style="max-width:700px;">
+    <div class="card shadow-lg border-0 rounded-4 p-4">
+        {% if error %}
+            <p class="text-danger fw-bold text-center">{{ error }}</p>
+        {% else %}
 
-        <div style="margin-bottom:20px; font-size:1.1em;">
-            <p><strong>Price:</strong> ₹{{ item.price }}</p>
-            <p><strong>Quantity:</strong> {{ qty }}</p>
-            <p><strong>Total:</strong> <span style="color:#28a745; font-weight:700;">₹{{ total }}</span></p>
+        <!-- Order Summary -->
+        <h2 class="fw-bold text-center text-coffee mb-4">🛒 Your Order</h2>
+        <div class="d-flex flex-column flex-md-row align-items-center gap-4 mb-4 p-3 rounded-4 bg-light">
+            {% if item.image %}
+                <img src="{{ item.image.url }}" alt="{{ item.name }}" 
+                     class="rounded-4 shadow-sm" style="width:160px; height:160px; object-fit:cover;">
+            {% else %}
+                <img src="https://via.placeholder.com/160x160?text={{ item.name }}" 
+                     class="rounded-4 shadow-sm">
+            {% endif %}
+            <div>
+                <h4 class="fw-bold">{{ item.name }}</h4>
+                <p class="mb-1"><strong>Price:</strong> ₹{{ item.price }}</p>
+                <p class="mb-1"><strong>Quantity:</strong> {{ qty }}</p>
+                <p class="fw-bold text-success fs-5">Total: ₹{{ total }}</p>
+            </div>
         </div>
 
-        <form method="post" action="{% url 'order_confirm' %}" style="display:flex; flex-direction:column; gap:15px;">
+        <!-- Payment Section -->
+        <form method="post" action="{% url 'order_confirm' %}" class="d-flex flex-column gap-3">
             {% csrf_token %}
             <input type="hidden" name="item_id" value="{{ item.id }}">
             <input type="hidden" name="qty" value="{{ qty }}">
 
-            <label style="font-weight:600;">Payment Method:</label>
-            <select name="payment_method" style="padding:10px; border-radius:5px; border:1px solid #ccc;">
-                <option value="cod">Cash on Delivery</option>
-                <option value="online">Online Payment</option>
+            <label class="fw-bold">💳 Select Payment Method</label>
+            <select name="payment_method" class="form-select py-2 px-3 rounded-3 border-coffee">
+                <option value="cod">💵 Cash on Delivery</option>
+                <option value="online">💳 Online Payment</option>
             </select>
 
-            <button type="submit" style="padding:12px; background:#ff6f61; color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer; transition:0.3s;">
-                Confirm Order
+            <!-- Payment Icons -->
+            <div class="d-flex gap-4 justify-content-center mt-3 fs-2">
+                <span title="Cash">💵</span>
+                <span title="Card">💳</span>
+                <span title="UPI / Wallet">📱</span>
+            </div>
+
+            <!-- Confirm Button -->
+            <button type="submit" 
+                class="btn btn-lg btn-coffee fw-bold mt-4 shadow-sm w-100">
+                ✅ Confirm Order
             </button>
         </form>
-    {% endif %}
+
+        <!-- Back to Menu -->
+        <div class="text-center mt-4">
+            <a href="{% url 'menu' %}" class="btn btn-outline-coffee px-4">⬅️ Back to Menu</a>
+        </div>
+
+        {% endif %}
+    </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<style>
+:root {
+    --coffee-dark: #4B2E2B;
+    --coffee-medium: #7B4F45;
+    --coffee-light: #ff6f61;
+}
+.text-coffee { color: var(--coffee-dark); }
+
+.btn-coffee {
+    background: var(--coffee-light);
+    color: #fff;
+    border-radius: 12px;
+    transition: 0.3s;
+}
+.btn-coffee:hover {
+    background: #e65348;
+    transform: translateY(-2px);
+}
+
+.btn-outline-coffee {
+    border: 2px solid var(--coffee-dark);
+    color: var(--coffee-dark);
+    border-radius: 10px;
+    transition: 0.3s;
+}
+.btn-outline-coffee:hover {
+    background: var(--coffee-dark);
+    color: #fff;
+}
+
+.border-coffee {
+    border: 2px solid var(--coffee-light);
+}
+</style>
 {% endblock %}

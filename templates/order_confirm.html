@@ -1,31 +1,143 @@
 {% extends "base.html" %}
-{% block title %}Order Confirmed{% endblock %}
+{% load static %}
+
+{% block title %}Order Confirmation - Cafe{% endblock %}
 
 {% block content %}
-<div style="max-width:600px; margin:50px auto; background:#fff; padding:30px; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.1); text-align:center;">
-    <h1 style="color:#28a745; font-weight:700; margin-bottom:20px;">
-        ✅ Order #{{ order.id }} Confirmed!
-    </h1>
+<div class="container my-5">
+    <div class="card shadow-lg p-5 border-0 rounded-4 animate-fade-in">
 
-    <div style="margin:20px 0; text-align:left;">
-        <p><strong>Item:</strong> {{ order.item.name }}</p>
-        <p><strong>Quantity:</strong> {{ order.quantity }}</p>
-        <p><strong>Total Price:</strong> <span style="color:#ff6f61;">₹{{ order.total_price }}</span></p>
-        <p><strong>Status:</strong> 
-            {% if order.status == 'Pending' %}
-                <span style="color:#ffc107; font-weight:600;">{{ order.status }}</span>
-            {% elif order.status == 'Completed' %}
-                <span style="color:#28a745; font-weight:600;">{{ order.status }}</span>
-            {% elif order.status == 'Cancelled' %}
-                <span style="color:#dc3545; font-weight:600;">{{ order.status }}</span>
+        <!-- Success Icon -->
+        <div class="text-center mb-4">
+            <div class="success-icon mx-auto">
+                <i class="fas fa-check"></i>
+            </div>
+        </div>
+
+        <!-- Status Heading -->
+        <div class="text-center mb-5">
+            {% if order.status == "Confirmed" %}
+                <h1 class="fw-bold text-success">Order Confirmed 🎉</h1>
+                <p class="lead">Thank you {{ order.user.first_name }}! Your order has been placed successfully.</p>
+            {% elif order.status == "Paid" %}
+                <h1 class="fw-bold text-primary">Payment Successful 💳</h1>
+                <p class="lead">Your order has been paid and is being prepared.</p>
             {% else %}
-                {{ order.status }}
+                <h1 class="fw-bold text-warning">⌛ Order Pending</h1>
+                <p class="lead">We are processing your order. Please wait...</p>
             {% endif %}
-        </p>
-    </div>
+        </div>
 
-    <a href="{% url 'index' %}" style="display:inline-block; margin-top:30px; padding:12px 25px; background:#ff6f61; color:#fff; font-weight:600; border-radius:8px; text-decoration:none; transition:0.3s;">
-        Back to Home
-    </a>
+        <!-- Full page two-column layout -->
+        <div class="row align-items-center">
+            
+            <!-- Left side: Item Image -->
+            <div class="col-md-6 text-center mb-4 mb-md-0">
+                {% if order.item.image %}
+                    <img src="{{ order.item.image.url }}" alt="{{ order.item.name }}"
+                         class="img-fluid rounded-4 shadow-sm"
+                         style="max-height:350px; object-fit:cover; width:100%;">
+                {% else %}
+                    <img src="{% static 'images/no-image.png' %}" alt="No Image"
+                         class="img-fluid rounded-4 shadow-sm"
+                         style="max-height:350px; object-fit:cover; width:100%;">
+                {% endif %}
+            </div>
+
+            <!-- Right side: Order Details -->
+            <div class="col-md-6">
+                <div class="order-summary p-4 rounded-4 shadow-sm bg-light">
+                    <h4 class="fw-bold mb-4 text-center">🧾 Order Summary</h4>
+                    <p><strong>🆔 Order ID:</strong> #{{ order.id }}</p>
+                    <p><strong>🍴 Item:</strong> {{ order.item.name }}</p>
+                    <p><strong>🔢 Quantity:</strong> {{ order.quantity }}</p>
+                    <p><strong>💰 Total Price:</strong> 
+                        <span class="fw-bold text-danger">₹{{ order.total_price }}</span>
+                    </p>
+                    <p>
+                        <strong>📦 Status:</strong>
+                        {% if order.status == "Confirmed" %}
+                            <span class="badge bg-success px-3 py-2">Confirmed</span>
+                        {% elif order.status == "Paid" %}
+                            <span class="badge bg-primary px-3 py-2">Paid</span>
+                        {% else %}
+                            <span class="badge bg-secondary px-3 py-2">{{ order.status }}</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex justify-content-center gap-3 mt-5">
+            <a href="{% url 'index' %}" class="btn btn-coffee px-4 py-2 fw-bold shadow-sm rounded-3">
+                🏠 Back to Home
+            </a>
+            <a href="{% url 'menu' %}" class="btn btn-outline-coffee px-4 py-2 fw-bold rounded-3">
+                🍽️ Order More
+            </a>
+        </div>
+    </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<style>
+:root {
+    --coffee-brown: #6f4e37;
+    --coffee-light: #ff6f61;
+}
+
+/* Fade-in animation */
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-in-out;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Success check icon */
+.success-icon {
+    width: 100px;
+    height: 100px;
+    background: #e6f9ed;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    font-size: 2.5rem;
+    color: #28a745;
+    transition: 0.3s;
+}
+.success-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Order summary box */
+.order-summary {
+    border-left: 5px solid var(--coffee-light);
+}
+
+/* Buttons */
+.btn-coffee {
+    background-color: var(--coffee-light);
+    color: #fff;
+    transition: 0.3s;
+}
+.btn-coffee:hover {
+    background-color: #e85b50;
+    transform: translateY(-2px);
+}
+.btn-outline-coffee {
+    border: 2px solid var(--coffee-brown);
+    color: var(--coffee-brown);
+    transition: 0.3s;
+}
+.btn-outline-coffee:hover {
+    background: var(--coffee-brown);
+    color: white;
+}
+</style>
 {% endblock %}

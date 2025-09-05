@@ -2,46 +2,157 @@
 {% block title %}{{ item.name }} - Cafe{% endblock %}
 
 {% block content %}
-<div class="container my-5" style="max-width: 800px;">
-    <div class="card shadow-sm p-4 rounded-4">
-        <!-- Item Image -->
-        {% if item.image %}
-            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="img-fluid rounded-4 mb-4" style="max-height: 450px; object-fit: cover;">
-        {% else %}
-            <img src="https://via.placeholder.com/800x450?text={{ item.name }}" alt="{{ item.name }}" class="img-fluid rounded-4 mb-4" style="object-fit: cover;">
-        {% endif %}
-        
-        <!-- Item Info -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="fw-bold">{{ item.name }}</h2>
-            <span class="badge bg-danger fs-5">₹{{ item.price }}</span>
-        </div>
-        
-        <p class="mb-4" style="line-height: 1.6; color: #555;">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
-        
-        <!-- Order Button -->
-        <a href="{% url 'order_page' %}?item_id={{ item.id }}&qty=1" 
-           class="btn btn-danger btn-lg w-100 fw-bold text-uppercase" 
-           style="transition: transform 0.2s, box-shadow 0.2s;">
-            Order Now
+<div class="container my-5" style="max-width: 1000px;">
+
+    <!-- Navigation Buttons -->
+    <div class="d-flex justify-content-between mb-4">
+        <a href="{% url 'index' %}" class="btn btn-outline-coffee">
+            ⬅️ Home
+        </a>
+        <a href="{% url 'menu' %}" class="btn btn-outline-coffee">
+            🍴 Back to Menu
         </a>
     </div>
-</div>
 
+    <div class="row g-4 align-items-center">
+        <!-- Item Image -->
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-4 overflow-hidden position-relative">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.name }}" 
+                         class="img-fluid w-100" style="height: 450px; object-fit: cover;">
+                {% else %}
+                    <img src="https://via.placeholder.com/800x450?text={{ item.name }}" 
+                         alt="{{ item.name }}" class="img-fluid w-100" style="height: 450px; object-fit: cover;">
+                {% endif %}
+
+                <!-- Offer Ribbon -->
+                <div class="position-absolute top-0 start-0 bg-danger text-white px-3 py-1 fw-bold rounded-end">
+                    ⭐ Best Seller
+                </div>
+            </div>
+        </div>
+
+        <!-- Item Info -->
+        <div class="col-md-6">
+            <div class="p-4 bg-light rounded-4 shadow-sm">
+                <span class="badge bg-coffee mb-3">{{ item.menu.name }}</span>
+                <h2 class="fw-bold mb-3 text-coffee">{{ item.name }}</h2>
+                <p class="mb-4" style="line-height: 1.6; color: #555;">
+                    A delightful treat prepared with love ❤️. Fresh, flavorful, and perfect for your cravings.
+                </p>
+
+                <!-- Price -->
+                <h4 class="fw-bold text-danger mb-4">₹{{ item.price }}</h4>
+
+                <!-- Quantity Selector -->
+                <div class="d-flex align-items-center gap-2 mb-4">
+                    <button class="btn btn-outline-coffee btn-sm qty-decrease">-</button>
+                    <input type="text" value="1" class="form-control text-center qty-input" 
+                           style="width: 60px;" data-id="{{ item.id }}">
+                    <button class="btn btn-outline-coffee btn-sm qty-increase">+</button>
+                </div>
+
+                <!-- Order Button -->
+                <a href="{% url 'order_page' %}?item_id={{ item.id }}&qty=1" 
+                   class="btn btn-coffee btn-lg fw-bold w-100 order-btn d-flex justify-content-center align-items-center gap-2" 
+                   data-id="{{ item.id }}">
+                    🛒 Order Now
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Suggested Items -->
+    <div class="mt-5">
+        <h3 class="fw-bold text-coffee mb-4">You may also like 🍴</h3>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+            {% for suggestion in item.menu.menuitem_set.all|slice:":3" %}
+                {% if suggestion.id != item.id %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 rounded-4 text-center hover-card">
+                        {% if suggestion.image %}
+                            <img src="{{ suggestion.image.url }}" class="card-img-top" 
+                                 style="height:180px; object-fit:cover;">
+                        {% else %}
+                            <img src="https://via.placeholder.com/300x180?text={{ suggestion.name }}" 
+                                 class="card-img-top" style="height:180px; object-fit:cover;">
+                        {% endif %}
+                        <div class="card-body">
+                            <h6 class="fw-bold">{{ suggestion.name }}</h6>
+                            <p class="text-danger fw-bold mb-2">₹{{ suggestion.price }}</p>
+                            <a href="{% url 'menu_details' suggestion.id %}" 
+                               class="btn btn-outline-coffee btn-sm">View</a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
 {% endblock %}
 
 {% block extra_scripts %}
+<style>
+:root {
+    --coffee-dark: #4B2E2B;
+    --coffee-medium: #7B4F45;
+    --coffee-light: #D9B99B;
+}
+.text-coffee { color: var(--coffee-dark); }
+.bg-coffee { background-color: var(--coffee-light) !important; }
+
+.btn-coffee {
+    background-color: var(--coffee-medium);
+    color: #fff;
+    border: none;
+    transition: 0.3s;
+}
+.btn-coffee:hover {
+    background-color: var(--coffee-dark);
+    transform: translateY(-2px);
+}
+.btn-outline-coffee {
+    border: 1px solid var(--coffee-dark);
+    color: var(--coffee-dark);
+    transition: 0.3s;
+}
+.btn-outline-coffee:hover {
+    background-color: var(--coffee-dark);
+    color: #fff;
+}
+.hover-card { transition: transform 0.3s, box-shadow 0.3s; }
+.hover-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+</style>
+
 <script>
-    const orderBtn = document.querySelector('.btn-danger');
-    orderBtn.addEventListener('mouseenter', () => {
-        orderBtn.style.transform = 'scale(1.05)';
-        orderBtn.style.boxShadow = '0 8px 20px rgba(0,0,0,0.2)';
+    const increaseBtn = document.querySelector('.qty-increase');
+    const decreaseBtn = document.querySelector('.qty-decrease');
+    const qtyInput = document.querySelector('.qty-input');
+    const orderBtn = document.querySelector('.order-btn');
+
+    function updateOrderLink() {
+        const qty = qtyInput.value;
+        orderBtn.href = `{% url 'order_page' %}?item_id={{ item.id }}&qty=${qty}`;
+    }
+
+    increaseBtn.addEventListener('click', () => {
+        qtyInput.value = parseInt(qtyInput.value) + 1;
+        updateOrderLink();
     });
-    orderBtn.addEventListener('mouseleave', () => {
-        orderBtn.style.transform = 'scale(1)';
-        orderBtn.style.boxShadow = 'none';
+
+    decreaseBtn.addEventListener('click', () => {
+        if (parseInt(qtyInput.value) > 1) {
+            qtyInput.value = parseInt(qtyInput.value) - 1;
+            updateOrderLink();
+        }
+    });
+
+    qtyInput.addEventListener('input', () => {
+        if (isNaN(qtyInput.value) || qtyInput.value < 1) qtyInput.value = 1;
+        updateOrderLink();
     });
 </script>
 {% endblock %}

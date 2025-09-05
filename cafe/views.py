@@ -12,31 +12,29 @@ def index(request):
     return render(request, "index.html", {"categories": categories})
 
 # Menu page
-# Menu page
 def menu_view(request):
-    category_id = request.GET.get('category')
+    categories = Menu.objects.all()
+    category_id = request.GET.get('category')  # category from home page
+
     if category_id:
-        # Show only items from selected category
-        category = get_object_or_404(Menu, id=category_id)
-        all_items = MenuItem.objects.filter(menu=category)
-        selected_category = category.name
+        all_items = MenuItem.objects.filter(menu_id=category_id).select_related('menu')
+        selected_category = get_object_or_404(Menu, id=category_id)
     else:
-        # Show all items
-        all_items = MenuItem.objects.all()
-        selected_category = "All Items"
+        all_items = MenuItem.objects.select_related('menu').all()
+        selected_category = None
 
-    return render(request, "menupage.html", {
-        "all_items": all_items,
-        "selected_category": selected_category,
+    return render(request, 'menupage.html', {
+        'categories': categories,
+        'all_items': all_items,
+        'selected_category': selected_category
     })
-
 
 # Menu details
 def menu_details(request, item_id):
     item = get_object_or_404(MenuItem, id=item_id)
     return render(request, "menu_details.html", {"item": item})
 
-# Order page (login required)
+# Order page
 def order_page(request):
     if not request.user.is_authenticated:
         messages.info(request, "Please login to place an order.")
@@ -57,7 +55,8 @@ def order_page(request):
         "total": item.price * qty
     })
 
-# Confirm order
+# from django.core.mail import send_mail
+
 def order_confirm(request):
     if not request.user.is_authenticated:
         messages.info(request, "Please login to place an order.")
@@ -85,11 +84,32 @@ def order_confirm(request):
     if payment_method == "cod":
         order.status = "Confirmed"
         order.save()
+
+        # ✅ Send order confirmation email (COD)
+        subject = "Your Cafe Order is Confirmed! ✅"
+        message = f"""
+Hello {request.user.first_name or request.user.username},
+
+Thank you for your order at Cafe! 🍕☕🍔
+
+📌 Order Details:
+- Item: {item.name}
+- Quantity: {qty}
+- Total: ₹{total}
+
+Payment Method: Cash on Delivery
+
+We will prepare your order soon. 🚀
+
+- Cafe Team
+"""
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [request.user.email], fail_silently=True)
+
         return render(request, "order_confirm.html", {"order": order})
     else:
         return redirect("payment_page", order_id=order.id)
 
-# Razorpay payment page
+# Payment page
 def payment_page(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
@@ -151,7 +171,29 @@ def register_view(request):
         return redirect("login")
     return render(request, "register.html")
 
-# Login
+# # Login
+# def login_view(request):
+#     if request.method == "POST":
+#         username = request.POST.get("username")
+#         password = request.POST.get("password")
+#         user = authenticate(request, username=username, password=password)
+#         if user:
+#             login(request, user)
+#             messages.success(request, "Login successful!")
+#             return redirect("index")
+#         else:
+#             messages.error(request, "Invalid username or password")
+#             return redirect("login")
+#     return render(request, "login.html")
+
+# Logout
+def logout_view(request):
+    logout(request)
+    messages.success(request, "Logged out successfully.")
+    return redirect("index")
+from django.core.mail import send_mail
+# from django.conf import settings
+
 def login_view(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -160,14 +202,28 @@ def login_view(request):
         if user:
             login(request, user)
             messages.success(request, "Login successful!")
+
+            # ✅ Send email after login
+            subject = "Cafe Login Successful"
+            message = f"""
+Hello {user.first_name or user.username},
+
+You have successfully logged into your Cafe account.
+
+Happy Ordering! ☕🍰🍔
+
+- Cafe Team
+"""
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,  # sender
+                [user.email],  # recipient
+                fail_silently=True,
+            )
+
             return redirect("index")
         else:
             messages.error(request, "Invalid username or password")
             return redirect("login")
     return render(request, "login.html")
-
-# Logout
-def logout_view(request):
-    logout(request)
-    messages.success(request, "Logged out successfully.")
-    return redirect("index")
