@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Order Page{% endblock %}
+
+{% block content %}
+<div style="max-width:600px; margin:50px auto; background:#fff; padding:30px; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.1);">
+    {% if error %}
+        <p class="error" style="color:#dc3545; font-weight:600; text-align:center;">{{ error }}</p>
+    {% else %}
+        <h1 style="text-align:center; margin-bottom:20px; color:#ff6f61;">Order: {{ item.name }}</h1>
+
+        <div style="margin-bottom:20px; font-size:1.1em;">
+            <p><strong>Price:</strong> ₹{{ item.price }}</p>
+            <p><strong>Quantity:</strong> {{ qty }}</p>
+            <p><strong>Total:</strong> <span style="color:#28a745; font-weight:700;">₹{{ total }}</span></p>
+        </div>
+
+        <form method="post" action="{% url 'order_confirm' %}" style="display:flex; flex-direction:column; gap:15px;">
+            {% csrf_token %}
+            <input type="hidden" name="item_id" value="{{ item.id }}">
+            <input type="hidden" name="qty" value="{{ qty }}">
+
+            <label style="font-weight:600;">Payment Method:</label>
+            <select name="payment_method" style="padding:10px; border-radius:5px; border:1px solid #ccc;">
+                <option value="cod">Cash on Delivery</option>
+                <option value="online">Online Payment</option>
+            </select>
+
+            <button type="submit" style="padding:12px; background:#ff6f61; color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer; transition:0.3s;">
+                Confirm Order
+            </button>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}

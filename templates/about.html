@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}About Us{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto; padding: 20px;">
+    <h1 style="text-align:center; margin-bottom: 30px;">About Our Cafe ☕</h1>
+
+    <!-- About Section -->
+    <div class="card" style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px;">
+        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80" 
+             alt="Cafe" style="flex:1 1 300px; border-radius: 10px; max-width: 100%; height: auto;">
+        <div style="flex:1 1 300px;">
+            <h2>Our Story</h2>
+            <p>Founded in 2020, Our Cafe has been serving the finest coffee and snacks with a passion for quality and community. We believe in creating a cozy, welcoming space for everyone to enjoy a perfect cup of coffee.</p>
+            <p>Our baristas are trained to craft each beverage with care, ensuring every sip is an experience. Whether you’re here for a quick espresso or a relaxing latte, we’ve got you covered!</p>
+        </div>
+    </div>
+
+    <!-- Mission Section -->
+    <div class="card" style="margin-top: 20px;">
+        <h2>Our Mission</h2>
+        <p>To bring people together over great coffee and unforgettable flavors. We aim to make every visit a memorable experience, combining taste, comfort, and community spirit.</p>
+    </div>
+
+    <!-- Vision Section -->
+    <div class="card" style="margin-top: 20px;">
+        <h2>Our Vision</h2>
+        <p>To be the go-to cafe for coffee lovers in the city, known for quality, consistency, and a warm, welcoming atmosphere.</p>
+    </div>
+</div>
+{% endblock %}

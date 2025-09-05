@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Order Confirmed{% endblock %}
+
+{% block content %}
+<div style="max-width:600px; margin:50px auto; background:#fff; padding:30px; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.1); text-align:center;">
+    <h1 style="color:#28a745; font-weight:700; margin-bottom:20px;">
+        ✅ Order #{{ order.id }} Confirmed!
+    </h1>
+
+    <div style="margin:20px 0; text-align:left;">
+        <p><strong>Item:</strong> {{ order.item.name }}</p>
+        <p><strong>Quantity:</strong> {{ order.quantity }}</p>
+        <p><strong>Total Price:</strong> <span style="color:#ff6f61;">₹{{ order.total_price }}</span></p>
+        <p><strong>Status:</strong> 
+            {% if order.status == 'Pending' %}
+                <span style="color:#ffc107; font-weight:600;">{{ order.status }}</span>
+            {% elif order.status == 'Completed' %}
+                <span style="color:#28a745; font-weight:600;">{{ order.status }}</span>
+            {% elif order.status == 'Cancelled' %}
+                <span style="color:#dc3545; font-weight:600;">{{ order.status }}</span>
+            {% else %}
+                {{ order.status }}
+            {% endif %}
+        </p>
+    </div>
+
+    <a href="{% url 'index' %}" style="display:inline-block; margin-top:30px; padding:12px 25px; background:#ff6f61; color:#fff; font-weight:600; border-radius:8px; text-decoration:none; transition:0.3s;">
+        Back to Home
+    </a>
+</div>
+{% endblock %}

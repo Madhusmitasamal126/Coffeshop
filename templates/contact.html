@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Contact Us{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <h1 class="text-center mb-5 fw-bold">Get in Touch ☕</h1>
+
+    <div class="row g-4">
+
+        <!-- Email Card -->
+        <div class="col-md-4">
+            <div class="card text-center h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <i class="fas fa-envelope fa-3x mb-3 text-danger"></i>
+                    <h5 class="card-title fw-bold">Email</h5>
+                    <p class="card-text">info@ourcafe.com</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phone Card -->
+        <div class="col-md-4">
+            <div class="card text-center h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <i class="fas fa-phone fa-3x mb-3 text-danger"></i>
+                    <h5 class="card-title fw-bold">Phone</h5>
+                    <p class="card-text">+91 1234567890</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Address Card -->
+        <div class="col-md-4">
+            <div class="card text-center h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <i class="fas fa-map-marker-alt fa-3x mb-3 text-danger"></i>
+                    <h5 class="card-title fw-bold">Address</h5>
+                    <p class="card-text">123 Cafe Street, City, India</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Contact Form -->
+    <div class="card mt-5 shadow-sm border-0 p-4">
+        <h3 class="mb-4 fw-bold text-center">Send Us a Message</h3>
+        <form method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+                </div>
+                <div class="col-md-6">
+                    <input type="email" name="email" class="form-control" placeholder="Your Email" required>
+                </div>
+                <div class="col-12">
+                    <textarea name="message" class="form-control" placeholder="Your Message" rows="5" required></textarea>
+                </div>
+                <div class="col-12 text-center">
+                    <button type="submit" class="btn btn-danger px-4 py-2 fw-bold">Send Message</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}
