@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.urls import reverse
 from .models import Menu, MenuItem, Order
 import razorpay
 from django.conf import settings
+from django.core.mail import send_mail
 
 # Home page
 def index(request):
@@ -14,19 +16,18 @@ def index(request):
 # Menu page
 def menu_view(request):
     categories = Menu.objects.all()
-    category_id = request.GET.get('category')  # category from home page
-
+    category_id = request.GET.get("category")
     if category_id:
-        all_items = MenuItem.objects.filter(menu_id=category_id).select_related('menu')
+        all_items = MenuItem.objects.filter(menu_id=category_id).select_related("menu")
         selected_category = get_object_or_404(Menu, id=category_id)
     else:
-        all_items = MenuItem.objects.select_related('menu').all()
+        all_items = MenuItem.objects.select_related("menu").all()
         selected_category = None
 
-    return render(request, 'menupage.html', {
-        'categories': categories,
-        'all_items': all_items,
-        'selected_category': selected_category
+    return render(request, "menupage.html", {
+        "categories": categories,
+        "all_items": all_items,
+        "selected_category": selected_category,
     })
 
 # Menu details
@@ -38,25 +39,25 @@ def menu_details(request, item_id):
 def order_page(request):
     if not request.user.is_authenticated:
         messages.info(request, "Please login to place an order.")
-        return redirect("login")
+        return redirect(f"{reverse('login')}?next={request.path}")
 
-    item_id = request.GET.get('item_id')
+    item_id = request.GET.get("item_id")
     if not item_id:
         messages.error(request, "No item selected.")
         return redirect("menu")
 
     item = get_object_or_404(MenuItem, id=item_id)
-    qty = int(request.GET.get('qty', 1))
-    if qty < 1: qty = 1
+    qty = int(request.GET.get("qty", 1))
+    if qty < 1:
+        qty = 1
 
     return render(request, "order_page.html", {
         "item": item,
         "qty": qty,
-        "total": item.price * qty
+        "total": item.price * qty,
     })
 
-# from django.core.mail import send_mail
-
+# Order confirm
 def order_confirm(request):
     if not request.user.is_authenticated:
         messages.info(request, "Please login to place an order.")
@@ -78,14 +79,14 @@ def order_confirm(request):
         item=item,
         quantity=qty,
         total_price=total,
-        status="pending"
+        status="pending",
     )
 
     if payment_method == "cod":
         order.status = "Confirmed"
         order.save()
 
-        # ✅ Send order confirmation email (COD)
+        # Send email
         subject = "Your Cafe Order is Confirmed! ✅"
         message = f"""
 Hello {request.user.first_name or request.user.username},
@@ -116,7 +117,7 @@ def payment_page(request, order_id):
     razorpay_order = client.order.create({
         "amount": int(order.total_price * 100),
         "currency": "INR",
-        "payment_capture": "1"
+        "payment_capture": "1",
     })
     context = {
         "order": order,
@@ -164,36 +165,14 @@ def register_view(request):
             username=username,
             email=email,
             password=password,
-            first_name=fullname
+            first_name=fullname,
         )
         user.save()
         messages.success(request, "Registration successful! Please login.")
         return redirect("login")
     return render(request, "register.html")
 
-# # Login
-# def login_view(request):
-#     if request.method == "POST":
-#         username = request.POST.get("username")
-#         password = request.POST.get("password")
-#         user = authenticate(request, username=username, password=password)
-#         if user:
-#             login(request, user)
-#             messages.success(request, "Login successful!")
-#             return redirect("index")
-#         else:
-#             messages.error(request, "Invalid username or password")
-#             return redirect("login")
-#     return render(request, "login.html")
-
-# Logout
-def logout_view(request):
-    logout(request)
-    messages.success(request, "Logged out successfully.")
-    return redirect("index")
-from django.core.mail import send_mail
-# from django.conf import settings
-
+# Login
 def login_view(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -202,28 +181,17 @@ def login_view(request):
         if user:
             login(request, user)
             messages.success(request, "Login successful!")
-
-            # ✅ Send email after login
-            subject = "Cafe Login Successful"
-            message = f"""
-Hello {user.first_name or user.username},
-
-You have successfully logged into your Cafe account.
-
-Happy Ordering! ☕🍰🍔
-
-- Cafe Team
-"""
-            send_mail(
-                subject,
-                message,
-                settings.DEFAULT_FROM_EMAIL,  # sender
-                [user.email],  # recipient
-                fail_silently=True,
-            )
-
-            return redirect("index")
+            next_url = request.POST.get("next") or request.GET.get("next")
+            if next_url:
+                return redirect(next_url)
+            return redirect("order_page")
         else:
             messages.error(request, "Invalid username or password")
             return redirect("login")
     return render(request, "login.html")
+
+# Logout
+def logout_view(request):
+    logout(request)
+    messages.success(request, "Logged out successfully.")
+    return redirect("menu")

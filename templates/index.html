@@ -1,39 +1,43 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Home - Cafe{% endblock %}
+{% block title %}Cafe - Home{% endblock %}
 
 {% block content %}
-<div class="container py-5">
+<div class="container-fluid px-0 position-relative">
 
-    <!-- Hero Slider with gradient overlay -->
+    <!-- Floating Decorative Elements -->
+    <img src="{% static 'img/coffee-bean.jpg' %}" class="floating" style="top:20%; left:5%; width:40px;">
+    <img src="{% static 'img/coffee-cup.jpg' %}" class="floating" style="top:70%; right:10%; width:60px;">
+
+    <!-- Hero Slider -->
     <div id="heroCarousel" class="carousel slide mb-5 shadow rounded" data-bs-ride="carousel">
         <div class="carousel-inner rounded">
             <div class="carousel-item active position-relative">
-                <img src="{% static 'img/slider1.jpg' %}" class="d-block w-100" alt="Slider 1" style="height: 450px; object-fit: cover;">
+                <img src="{% static 'img/slider1.jpg' %}" class="d-block w-100" alt="Slider 1" style="height: 480px; object-fit: cover;">
                 <div class="overlay"></div>
-                <div class="carousel-caption d-none d-md-block text-start">
-                    <h1 class="fw-bold display-5">Welcome to Our Cafe ☕</h1>
+                <div class="carousel-caption text-start fade-in">
+                    <h1 class="fw-bold display-5 typing-text">Welcome to Our Cafe ☕</h1>
                     <p class="fs-5">Enjoy freshly brewed coffee & delicious treats!</p>
-                    <a href="{% url 'menu' %}" class="btn btn-danger btn-lg mt-2">View Menu</a>
+                    <a href="{% url 'menu' %}" class="btn btn-danger btn-lg mt-2 pulse-btn">View Menu</a>
                 </div>
             </div>
             <div class="carousel-item position-relative">
-                <img src="{% static 'img/slider2.jpg' %}" class="d-block w-100" alt="Slider 2" style="height: 450px; object-fit: cover;">
+                <img src="{% static 'img/slider2.jpg' %}" class="d-block w-100" alt="Slider 2" style="height: 480px; object-fit: cover;">
                 <div class="overlay"></div>
-                <div class="carousel-caption d-none d-md-block text-start">
+                <div class="carousel-caption text-start fade-in">
                     <h1 class="fw-bold display-5">Delicious Beverages 🍹</h1>
                     <p class="fs-5">Refreshing drinks for every mood.</p>
-                    <a href="{% url 'menu' %}" class="btn btn-danger btn-lg mt-2">Order Now</a>
+                    <a href="{% url 'menu' %}" class="btn btn-danger btn-lg mt-2 pulse-btn">Order Now</a>
                 </div>
             </div>
             <div class="carousel-item position-relative">
-                <img src="{% static 'img/slider3.jpg' %}" class="d-block w-100" alt="Slider 3" style="height: 450px; object-fit: cover;">
+                <img src="{% static 'img/slider3.jpg' %}" class="d-block w-100" alt="Slider 3" style="height: 480px; object-fit: cover;">
                 <div class="overlay"></div>
-                <div class="carousel-caption d-none d-md-block text-start">
+                <div class="carousel-caption text-start fade-in">
                     <h1 class="fw-bold display-5">Fresh & Tasty 🍰</h1>
                     <p class="fs-5">Indulge in desserts and bakery items!</p>
-                    <a href="{% url 'menu' %}" class="btn btn-danger btn-lg mt-2">Explore Now</a>
+                    <a href="{% url 'menu' %}" class="btn btn-danger btn-lg mt-2 pulse-btn">Explore Now</a>
                 </div>
             </div>
         </div>
@@ -46,45 +50,199 @@
     </div>
 
     <!-- Categories Section -->
-    <h2 class="text-center mb-5 fw-bold section-title">🍽️ Our Categories</h2>
-    <div class="row g-4 justify-content-center">
-        {% for category in categories|slice:":6" %}
-        <div class="col-6 col-sm-4 col-md-2 d-flex justify-content-center">
-            <div class="card category-card h-100 shadow-sm border-0 rounded-4 overflow-hidden position-relative">
-                <div class="img-container">
-                    {% if category.image %}
-                    <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.name }}">
-                    {% else %}
-                    <img src="{% static 'img/placeholder.jpg' %}" class="card-img-top" alt="{{ category.name }}">
-                    {% endif %}
-                    <div class="img-overlay"></div>
+    <div class="container py-5 scroll-reveal">
+        <h2 class="text-center mb-5 fw-bold section-title">🍽️ Our Categories</h2>
+        <div class="row g-4 justify-content-center">
+            {% for category in categories|slice:":6" %}
+            <div class="col-6 col-sm-4 col-md-2 d-flex justify-content-center">
+                <div class="card category-card h-100 shadow-sm border-0 rounded-4 overflow-hidden glass-card tilt-card">
+                    <div class="img-container">
+                        {% if category.image %}
+                        <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.name }}">
+                        {% else %}
+                        <img src="{% static 'img/placeholder.jpg' %}" class="card-img-top" alt="{{ category.name }}">
+                        {% endif %}
+                        <div class="img-overlay"></div>
+                    </div>
+                    <div class="card-body text-center">
+                        <h6 class="fw-bold">{{ category.name }}</h6>
+                        <a href="{% url 'menu' %}?category={{ category.id }}" class="btn btn-danger mt-2 px-3 btn-sm">View Items</a>
+                    </div>
                 </div>
-                <div class="card-body text-center">
-                    <h6 class="fw-bold">{{ category.name }}</h6>
-                    <a href="{% url 'menu' %}?category={{ category.id }}" class="btn btn-danger mt-2 px-3 btn-sm">View Items</a>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Call to Action Banner -->
+        <div class="cta-banner mt-5 p-5 text-center text-white rounded-4 shadow-lg">
+            <h3 class="fw-bold mb-3">Discover More Delicious Items!</h3>
+            <a href="{% url 'menu' %}" class="btn btn-lg btn-light px-5 fw-bold bounce-btn">View Full Menu</a>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div id="about" class="container-fluid py-5 scroll-reveal about-bg">
+        <div class="container">
+            <h1 class="text-center mb-5 fw-bold text-coffee">About Our Cafe ☕</h1>
+            <div class="row align-items-center mb-5">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <div class="card shadow-sm border-0 rounded-4 overflow-hidden parallax-card">
+                        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80" 
+                             class="card-img-top" alt="Cafe" style="height: 350px; object-fit: cover;">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-4 bg-light rounded-4 shadow-sm fade-in">
+                        <h2 class="fw-bold text-coffee mb-3">Our Story</h2>
+                        <p>Founded in 2020, Our Cafe has been serving the finest coffee and snacks with a passion for quality and community. We believe in creating a cozy, welcoming space for everyone to enjoy a perfect cup of coffee.</p>
+                        <p>Our baristas are trained to craft each beverage with care, ensuring every sip is an experience. Whether you’re here for a quick espresso or a relaxing latte, we’ve got you covered!</p>
+                    </div>
                 </div>
             </div>
         </div>
-        {% endfor %}
     </div>
 
-    <!-- Call to Action Banner -->
-    <div class="cta-banner mt-5 p-5 text-center text-white rounded-4 shadow-lg">
-        <h3 class="fw-bold mb-3">Discover More Delicious Items!</h3>
-        <a href="{% url 'menu' %}" class="btn btn-lg btn-light px-5 fw-bold">View Full Menu</a>
+    <!-- Contact Section -->
+    <div id="contact" class="contact-section py-5 scroll-reveal">
+        <div class="container">
+            <h1 class="text-center mb-5 fw-bold text-coffee">Get in Touch ☕</h1>
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="card text-center h-100 shadow-sm border-0 hover-card glass-card icon-animate">
+                        <div class="card-body">
+                            <i class="fas fa-envelope fa-3x mb-3 text-coffee"></i>
+                            <h5 class="card-title fw-bold">Email</h5>
+                            <p class="card-text">info@ourcafe.com</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center h-100 shadow-sm border-0 hover-card glass-card icon-animate">
+                        <div class="card-body">
+                            <i class="fas fa-phone fa-3x mb-3 text-coffee"></i>
+                            <h5 class="card-title fw-bold">Phone</h5>
+                            <p class="card-text">+91 1234567890</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center h-100 shadow-sm border-0 hover-card glass-card icon-animate">
+                        <div class="card-body">
+                            <i class="fas fa-map-marker-alt fa-3x mb-3 text-coffee"></i>
+                            <h5 class="card-title fw-bold">Address</h5>
+                            <p class="card-text">123 Cafe Street, City, India</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form & Map -->
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="card shadow-sm border-0 p-4 rounded-4 glass-card">
+                        <h3 class="mb-4 fw-bold text-center text-coffee">Send Us a Message ✍️</h3>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="form-floating mb-3">
+                                <input type="text" name="name" class="form-control" id="nameInput" placeholder="Your Name" required>
+                                <label for="nameInput">Your Name</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="email" name="email" class="form-control" id="emailInput" placeholder="Your Email" required>
+                                <label for="emailInput">Your Email</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <textarea name="message" class="form-control" id="messageInput" placeholder="Your Message" style="height:150px;" required></textarea>
+                                <label for="messageInput">Your Message</label>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-coffee btn-lg px-5">Send Message</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card shadow-sm border-0 rounded-4 overflow-hidden glass-card">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.471326174942!2d85.818!3d20.296!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjDCsDE3JzQ1LjciTiA4NcKwNDknMDQuNCJF!5e0!3m2!1sen!2sin!4v1633323432000!5m2!1sen!2sin" 
+                            width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="footer text-center text-white py-4 mt-5">
+        <div class="social-icons mb-3">
+            <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-lg"></i></a>
+            <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-lg"></i></a>
+            <a href="#" class="text-white"><i class="fab fa-twitter fa-lg"></i></a>
+        </div>
+        <p class="mb-0">© 2025 Our Cafe ☕ | Crafted with ❤️ & Coffee</p>
+    </footer>
+
 </div>
 {% endblock %}
 
 {% block extra_scripts %}
 <style>
-/* Overlay for carousel */
+/* Coffee Theme Colors */
+:root {
+    --coffee-dark: #4B2E2B;
+    --coffee-medium: #7B4F45;
+    --coffee-light: #D9B99B;
+}
+.text-coffee { color: var(--coffee-dark); }
+
+/* Overlay */
 .overlay {
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
     background: linear-gradient(to right, rgba(0,0,0,0.6), rgba(0,0,0,0.1));
     border-radius: 0.5rem;
+}
+
+/* Animations */
+.fade-in { animation: fadeInUp 1s ease-in-out; }
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.pulse-btn { animation: pulse 2s infinite; }
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+.bounce-btn:hover { animation: bounce 0.6s; }
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+/* Typing Effect */
+.typing-text {
+    border-right: 3px solid #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typing 3s steps(30, end), blink 0.8s infinite;
+}
+@keyframes typing { from { width: 0 } to { width: 100% } }
+@keyframes blink { 50% { border-color: transparent } }
+
+/* Floating Decorative Elements */
+.floating {
+    position: absolute;
+    z-index: 10;
+    opacity: 0.6;
+    animation: float 6s ease-in-out infinite;
+}
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
 }
 
 /* Section Title */
@@ -101,11 +259,12 @@
     left: 20%;
     bottom: -10px;
     border-radius: 2px;
-    animation: grow 1s ease-in-out;
 }
-@keyframes grow {
-    from { width: 0; }
-    to { width: 60%; }
+
+/* Glassmorphism */
+.glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
 }
 
 /* Category Cards */
@@ -113,7 +272,7 @@
     transition: transform 0.4s, box-shadow 0.4s;
 }
 .category-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-8px) scale(1.05);
     box-shadow: 0 15px 35px rgba(0,0,0,0.2);
 }
 .category-card img {
@@ -121,28 +280,98 @@
     object-fit: cover;
     transition: transform 0.5s ease;
 }
-.category-card:hover img {
-    transform: scale(1.1);
-}
-.img-container {
-    position: relative;
-    overflow: hidden;
-}
+.category-card:hover img { transform: scale(1.1); }
+.img-container { position: relative; overflow: hidden; }
 .img-overlay {
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: rgba(220,53,69,0.15);
+    background: linear-gradient(135deg, rgba(220,53,69,0.4), rgba(255,255,255,0.1));
     opacity: 0;
     transition: opacity 0.4s;
 }
-.category-card:hover .img-overlay {
-    opacity: 1;
-}
+.category-card:hover .img-overlay { opacity: 1; }
+
+/* Tilt Effect */
+.tilt-card { transition: transform 0.2s; }
+.tilt-card:hover { transform: rotate3d(1,1,0,8deg) scale(1.05); }
 
 /* CTA Banner */
 .cta-banner {
     background: linear-gradient(45deg, #dc3545, #ff6f61);
 }
+
+/* About Section */
+.about-bg {
+    background: linear-gradient(135deg, #fff 50%, #fbeee6 50%);
+}
+
+/* Contact Section */
+.contact-section {
+    background: linear-gradient(135deg, #fff7f0 0%, #f5e6da 100%);
+}
+.btn-coffee {
+    background-color: var(--coffee-medium);
+    color: #fff;
+    border: none;
+    transition: transform 0.3s, background-color 0.3s;
+}
+.btn-coffee:hover {
+    background-color: var(--coffee-dark);
+    transform: translateY(-2px);
+    color: #fff;
+}
+.hover-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(220,53,69,0.3);
+    border: 1px solid rgba(220,53,69,0.2);
+}
+/* Animated Icons */
+.icon-animate i { transition: transform 0.4s ease, color 0.4s; }
+.icon-animate:hover i {
+    transform: rotate(-10deg) scale(1.2);
+    color: #dc3545;
+}
+
+/* Parallax Effect */
+.parallax-card img {
+    transform: scale(1.05);
+    transition: transform 0.5s ease;
+}
+.parallax-card:hover img {
+    transform: scale(1.2);
+}
+
+/* Scroll Reveal */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s ease;
+}
+.scroll-reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Footer */
+.footer {
+    background: linear-gradient(45deg, var(--coffee-dark), var(--coffee-medium));
+}
+.footer .social-icons a { transition: color 0.3s, transform 0.3s; }
+.footer .social-icons a:hover { color: #ffdfba; transform: scale(1.2); }
 </style>
+
+<script>
+// Scroll reveal effect
+document.addEventListener("scroll", () => {
+  document.querySelectorAll(".scroll-reveal").forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight - 50) {
+      el.classList.add("visible");
+    }
+  });
+});
+</script>
 {% endblock %}
